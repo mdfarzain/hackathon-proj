@@ -1,0 +1,46 @@
+{
+  "mohamed.test@spider.ai": {
+    "id": "6e0391b3-9b32-490d-8b3f-da3e73e7a921",
+    "name": "Mohamed Al-Farsi",
+    "email": "mohamed.test@spider.ai",
+    "password_hash": "f20e33a0be3f8a5a2461989007332827ba9132344aa883ca29ca1b49269aa77f",
+    "node_id": "NODE-SPIDER-8093",
+    "member_since": "September 2026",
+    "role": "Verified Council Member",
+    "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=mohamed.test@spider.ai",
+    "risk_profile": "medium"
+  },
+  "mdfarzain759@gmail.com": {
+    "id": "96ddd68f-67be-4354-a719-726aded06956",
+    "name": "Mohamed Farzain",
+    "email": "mdfarzain759@gmail.com",
+    "password_hash": "9a70930797172a3514d5e32d374e51aab3317aeeeda991927801114f8e1a186d",
+    "node_id": "NODE-SPIDER-8141",
+    "member_since": "September 2026",
+    "role": "Verified Council Member",
+    "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=mdfarzain759@gmail.com",
+    "risk_profile": "low"
+  },
+  "limit@spider.ai": {
+    "id": "c2e1a5ac-1a3c-47fe-89eb-b38f418b4d22",
+    "name": "Limit Test",
+    "email": "limit@spider.ai",
+    "password_hash": "628c6b9ca99801e53c581c335297d5073252bff2d37829021d944bbee283f7c5",
+    "node_id": "NODE-SPIDER-8424",
+    "member_since": "September 2026",
+    "role": "Verified Council Member",
+    "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=limit@spider.ai",
+    "risk_profile": "low"
+  },
+  "lockout35@spider.ai": {
+    "id": "e25edfb8-691f-4cbe-9e01-f0530bff7d51",
+    "name": "Lockout 35s Test",
+    "email": "lockout35@spider.ai",
+    "password_hash": "628c6b9ca99801e53c581c335297d5073252bff2d37829021d944bbee283f7c5",
+    "node_id": "NODE-SPIDER-8940",
+    "member_since": "September 2026",
+    "role": "Verified Council Member",
+    "avatar_url": "https://api.dicebear.com/7.x/bottts/svg?seed=lockout35@spider.ai",
+    "risk_profile": "low"
+  }
+}
