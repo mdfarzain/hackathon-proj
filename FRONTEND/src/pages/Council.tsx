@@ -207,7 +207,7 @@ const Council: React.FC = () => {
                 THE SPIDER COUNCIL
               </h1>
               <span className="px-2.5 py-0.5 rounded-full bg-primary/10 border border-primary/30 text-primary font-mono text-xs font-bold">
-                ${activeStock}
+                {activeStock ? `$${activeStock}` : 'NO TICKER SELECTED'}
               </span>
             </div>
             <p className="font-body-main text-body-main text-on-surface-variant">
@@ -284,7 +284,9 @@ const Council: React.FC = () => {
                   </div>
                 </div>
               ) : (
-                <div className="py-8 text-center text-outline text-xs animate-pulse">Running technical momentum scan...</div>
+                <div className="py-8 text-center text-outline text-xs">
+                  {isLoading ? 'Running technical momentum scan...' : 'Agent standby. Enter a stock symbol above to deploy.'}
+                </div>
               )}
             </div>
 
@@ -354,7 +356,9 @@ const Council: React.FC = () => {
                   )}
                 </div>
               ) : (
-                <div className="py-8 text-center text-outline text-xs animate-pulse">Retrieving audited SEC/NSE filings...</div>
+                <div className="py-8 text-center text-outline text-xs">
+                  {isLoading ? 'Retrieving audited SEC/NSE filings...' : 'Agent standby. Ready to query statutory disclosures.'}
+                </div>
               )}
             </div>
 
@@ -408,7 +412,9 @@ const Council: React.FC = () => {
                   </div>
                 </div>
               ) : (
-                <div className="py-8 text-center text-outline text-xs animate-pulse">Aggregating real-time news wire...</div>
+                <div className="py-8 text-center text-outline text-xs">
+                  {isLoading ? 'Aggregating real-time news wire...' : 'Agent standby. Ready to scan global market sentiment.'}
+                </div>
               )}
             </div>
 
@@ -471,8 +477,8 @@ const Council: React.FC = () => {
                   </button>
                 </div>
               ) : (
-                <div className="py-12 text-center text-outline text-xs animate-pulse">
-                  Synthesizing multi-agent specialist signals...
+                <div className="py-12 text-center text-outline text-xs">
+                  {isLoading ? 'Synthesizing multi-agent specialist signals...' : 'Chairperson standby. Enter a stock symbol above to synthesize.'}
                 </div>
               )}
 
@@ -538,8 +544,8 @@ const Council: React.FC = () => {
                   </div>
                 </div>
               ) : (
-                <div className="py-12 text-center text-outline text-xs animate-pulse">
-                  Calibrating portfolio risk matrices...
+                <div className="py-12 text-center text-outline text-xs">
+                  {isLoading ? 'Calibrating portfolio risk matrices...' : 'Personalization standby. Enter a stock symbol above to evaluate risk vectors.'}
                 </div>
               )}
 

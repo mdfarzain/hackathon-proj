@@ -125,19 +125,9 @@ export const saveAppSettings = (settings: AppSettings) => {
 export const getSavedPortfolio = (): PortfolioItem[] => {
   try {
     const raw = localStorage.getItem(STORAGE_KEY_PORTFOLIO);
-    return raw
-      ? JSON.parse(raw)
-      : [
-          { symbol: 'TCS', sector: 'IT Services', percentage: 30 },
-          { symbol: 'INFY', sector: 'IT Services', percentage: 25 },
-          { symbol: 'RELIANCE', sector: 'Energy & Telecom', percentage: 45 },
-        ];
+    return raw ? JSON.parse(raw) : [];
   } catch {
-    return [
-      { symbol: 'TCS', sector: 'IT Services', percentage: 30 },
-      { symbol: 'INFY', sector: 'IT Services', percentage: 25 },
-      { symbol: 'RELIANCE', sector: 'Energy & Telecom', percentage: 45 },
-    ];
+    return [];
   }
 };
 
@@ -152,12 +142,12 @@ export const saveStoredPortfolio = (portfolio: PortfolioItem[]) => {
 export const getSavedCapital = (): number | null => {
   try {
     const raw = localStorage.getItem(STORAGE_KEY_CAPITAL);
-    if (raw === null || raw === undefined || raw === '') return 842500;
-    if (raw === 'null') return null;
+    if (raw === null || raw === undefined) return 0;
+    if (raw === 'null' || raw === '') return null;
     const parsed = Number(raw);
     return isNaN(parsed) ? null : parsed;
   } catch {
-    return 842500;
+    return 0;
   }
 };
 

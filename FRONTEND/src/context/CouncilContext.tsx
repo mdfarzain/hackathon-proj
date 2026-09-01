@@ -112,7 +112,7 @@ export const CouncilProvider: React.FC<{ children: React.ReactNode }> = ({ child
     return session?.risk_profile || 'low';
   });
 
-  const [activeStock, setActiveStock] = useState<string>('TCS');
+  const [activeStock, setActiveStock] = useState<string>('');
   const [portfolio, setPortfolioState] = useState<PortfolioItem[]>(() => getSavedPortfolio());
   const [totalCapital, setTotalCapitalState] = useState<number | null>(() => getSavedCapital());
   const [simulateTimeout, setSimulateTimeout] = useState<boolean>(false);
@@ -121,24 +121,7 @@ export const CouncilProvider: React.FC<{ children: React.ReactNode }> = ({ child
   const [error, setError] = useState<string | null>(null);
   const [appSettings, setAppSettings] = useState<AppSettings>(() => getSavedAppSettings());
   
-  const [recentAnalyses, setRecentAnalyses] = useState<RecentAnalysis[]>([
-    {
-      stock: 'RELIANCE',
-      timestamp: '15m ago',
-      verdict: 'bullish',
-      confidence: 0.88,
-      riskVerdict: 'opportunity',
-      totalLatency: 840,
-    },
-    {
-      stock: 'INFY',
-      timestamp: '1h ago',
-      verdict: 'neutral',
-      confidence: 0.76,
-      riskVerdict: 'moderate_risk',
-      totalLatency: 790,
-    },
-  ]);
+  const [recentAnalyses, setRecentAnalyses] = useState<RecentAnalysis[]>([]);
 
   const setPortfolio = (newPortfolio: PortfolioItem[]) => {
     setPortfolioState(newPortfolio);
@@ -186,6 +169,11 @@ export const CouncilProvider: React.FC<{ children: React.ReactNode }> = ({ child
   const logoutUser = () => {
     saveStoredSession(null);
     setUser(null);
+    setActiveStock('');
+    setPortfolioState([]);
+    setTotalCapitalState(0);
+    saveStoredPortfolio([]);
+    saveStoredCapital(0);
   };
 
   const updateUserProfile = async (name: string, risk?: RiskProfile): Promise<UserProfile> => {
@@ -276,13 +264,17 @@ export const CouncilProvider: React.FC<{ children: React.ReactNode }> = ({ child
       },
     ];
     setPortfolio(updated);
-    runAnalysis(activeStock, riskProfile, simulateTimeout, updated);
+    if (activeStock) {
+      runAnalysis(activeStock, riskProfile, simulateTimeout, updated);
+    }
   };
 
   const removeHolding = (symbol: string) => {
     const updated = portfolio.filter((p) => p.symbol !== symbol.toUpperCase());
     setPortfolio(updated);
-    runAnalysis(activeStock, riskProfile, simulateTimeout, updated);
+    if (activeStock) {
+      runAnalysis(activeStock, riskProfile, simulateTimeout, updated);
+    }
   };
 
   const loadPortfolioPreset = (presetKey: string) => {
@@ -290,13 +282,17 @@ export const CouncilProvider: React.FC<{ children: React.ReactNode }> = ({ child
       const p = PRESETS[presetKey];
       setTotalCapital(p.capital);
       setPortfolio(p.holdings);
-      runAnalysis(activeStock, riskProfile, simulateTimeout, p.holdings);
+      if (activeStock) {
+        runAnalysis(activeStock, riskProfile, simulateTimeout, p.holdings);
+      }
     }
   };
 
-  // Trigger default analysis on initial load
+  // Trigger analysis on load only if an active stock is already selected
   useEffect(() => {
-    runAnalysis('TCS', riskProfile, false);
+    if (activeStock) {
+      runAnalysis(activeStock, riskProfile, false);
+    }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (

@@ -75,7 +75,7 @@ const Dashboard: React.FC = () => {
       setTotalCapital(null);
     } else {
       const num = Number(trimmed);
-      if (!isNaN(num) && num > 0) {
+      if (!isNaN(num) && num >= 0) {
         setTotalCapital(num);
       } else {
         setTotalCapital(null);
@@ -106,15 +106,17 @@ const Dashboard: React.FC = () => {
               <div className="flex items-center gap-sm mb-xs">
                 <span className="w-2.5 h-2.5 rounded-full bg-[#d10332] animate-ping"></span>
                 <span className="font-label-caps text-label-caps text-[#ffb3b2] tracking-widest">
-                  SPIDER-SENSE ADVISORY ACTIVE
+                  {activeStock ? 'SPIDER-SENSE ADVISORY ACTIVE' : 'SPIDER-SENSE ADVISORY READY'}
                 </span>
                 <span className="px-2 py-0.5 rounded bg-[#d10332]/20 border border-[#d10332]/40 text-[#ffb3b2] text-[10px] font-mono">
-                  ${activeStock}
+                  {activeStock ? `$${activeStock}` : 'NO TICKER SELECTED'}
                 </span>
               </div>
 
               <h2 className="font-h2-section text-xl md:text-2xl font-bold text-on-background mb-xs">
-                {sense?.verdict === 'high_risk'
+                {!activeStock
+                  ? 'COUNCIL STANDBY: Select a Company to Begin Analysis'
+                  : sense?.verdict === 'high_risk'
                   ? `CONCENTRATION ALERT: ${activeStock} Sector Risk Warning`
                   : sense?.verdict === 'opportunity'
                   ? `TACTICAL OPPORTUNITY: Bullish Alignment on ${activeStock}`
@@ -122,14 +124,15 @@ const Dashboard: React.FC = () => {
               </h2>
 
               <p className="font-body-sm text-xs md:text-sm text-on-surface-variant max-w-3xl leading-relaxed mb-sm">
-                {sense?.reasoning || 'Multi-agent council actively evaluating ticker risk vectors.'}
+                {!activeStock
+                  ? 'Search or select any stock below to deploy the 5 autonomous intelligence agents.'
+                  : sense?.reasoning || 'Multi-agent council actively evaluating ticker risk vectors.'}
               </p>
 
               <div className="flex flex-wrap gap-sm">
                 <span className="px-sm py-xs border border-outline-variant/60 rounded-full font-label-md text-xs text-on-surface-variant bg-surface-container flex items-center gap-xs">
                   <span className="w-2 h-2 rounded-full bg-primary"></span>
-                  Consensus: {brain?.verdict.toUpperCase() || 'EVALUATING'} (
-                  {brain ? Math.round(brain.confidence * 100) : 0}%)
+                  Consensus: {brain ? `${brain.verdict.toUpperCase()} (${Math.round(brain.confidence * 100)}%)` : 'STANDBY'}
                 </span>
                 <span className="px-sm py-xs border border-outline-variant/60 rounded-full font-label-md text-xs text-on-surface-variant bg-surface-container flex items-center gap-xs">
                   <span className="w-2 h-2 rounded-full bg-[#d10332]"></span>
@@ -213,40 +216,48 @@ const Dashboard: React.FC = () => {
               className="absolute z-20 cursor-pointer transform hover:scale-110 transition-transform p-3 rounded-full bg-surface border-2 border-primary shadow-[0_0_20px_rgba(162,201,255,0.4)] flex flex-col items-center justify-center text-center"
             >
               <span className="text-xl">🕸️</span>
-              <span className="font-mono text-xs font-bold text-primary">${activeStock}</span>
+              <span className="font-mono text-xs font-bold text-primary">
+                {activeStock ? `$${activeStock}` : 'SELECT TICKER'}
+              </span>
               <span className="text-[9px] font-label-caps text-outline uppercase">
-                {brain?.verdict || 'ANALYZED'}
+                {activeStock ? (brain?.verdict || 'ANALYZED') : 'STANDBY'}
               </span>
             </div>
 
-            {/* Render User's Actual Portfolio Holdings */}
-            {portfolio.slice(0, 4).map((holding, idx) => {
-              const positions = [
-                { top: '18%', left: '16%' },
-                { top: '18%', right: '16%' },
-                { bottom: '16%', left: '20%' },
-                { bottom: '16%', right: '20%' },
-              ];
-              const pos = positions[idx] || { top: '50%', left: '10%' };
+            {/* Render User's Actual Portfolio Holdings or Empty State */}
+            {portfolio.length > 0 ? (
+              portfolio.slice(0, 4).map((holding, idx) => {
+                const positions = [
+                  { top: '18%', left: '16%' },
+                  { top: '18%', right: '16%' },
+                  { bottom: '16%', left: '20%' },
+                  { bottom: '16%', right: '20%' },
+                ];
+                const pos = positions[idx] || { top: '50%', left: '10%' };
 
-              return (
-                <div
-                  key={holding.symbol}
-                  onClick={() => handleQuickDeploy(holding.symbol)}
-                  className="absolute p-2 rounded-lg bg-surface-container border border-outline-variant flex items-center gap-1.5 cursor-pointer hover:border-primary hover:scale-105 transition-all z-10"
-                  style={pos}
-                  title={`Click to analyze ${holding.symbol} (${holding.sector})`}
-                >
-                  <span className="w-2 h-2 rounded-full bg-primary"></span>
-                  <span className="font-mono text-xs text-on-background font-bold">
-                    {holding.symbol}
-                  </span>
-                  <span className="text-[10px] font-mono text-outline">
-                    ({holding.percentage}%)
-                  </span>
-                </div>
-              );
-            })}
+                return (
+                  <div
+                    key={holding.symbol}
+                    onClick={() => handleQuickDeploy(holding.symbol)}
+                    className="absolute p-2 rounded-lg bg-surface-container border border-outline-variant flex items-center gap-1.5 cursor-pointer hover:border-primary hover:scale-105 transition-all z-10"
+                    style={pos}
+                    title={`Click to analyze ${holding.symbol} (${holding.sector})`}
+                  >
+                    <span className="w-2 h-2 rounded-full bg-primary"></span>
+                    <span className="font-mono text-xs text-on-background font-bold">
+                      {holding.symbol}
+                    </span>
+                    <span className="text-[10px] font-mono text-outline">
+                      ({holding.percentage}%)
+                    </span>
+                  </div>
+                );
+              })
+            ) : (
+              <div className="absolute bottom-4 text-[11px] font-mono text-outline text-center z-10 bg-surface/80 px-3 py-1 rounded border border-outline-variant/30">
+                No holdings added yet. Click &apos;CUSTOMIZE&apos; to add companies to your portfolio.
+              </div>
+            )}
           </div>
 
           <div className="flex items-center justify-between text-xs text-outline mt-sm relative z-10">
